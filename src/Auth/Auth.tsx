@@ -1,8 +1,11 @@
 import * as auth0 from "auth0-js";
+import { History } from "history";
 
 export default class Auth {
-  history: any;
+  history: History;
   auth0: auth0.WebAuth;
+  userProfile!: auth0.Auth0UserProfile;
+
   constructor(history: any) {
     this.history = history;
     this.auth0 = new auth0.WebAuth({
@@ -63,4 +66,34 @@ export default class Auth {
     }
     return false;
   }
+
+  logout = () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("id_token");
+    localStorage.removeItem("expires_at");
+    // this.history.push("/");  Soft
+    //Log out from Auth0 server
+    this.auth0.logout({
+      clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
+      returnTo: "http://localhost:3000"
+    });
+  };
+
+  getAccessToken = () => {
+    const accessToken = localStorage.getItem("access_token");
+    if (!accessToken) {
+      throw new Error("No access token found.");
+    }
+    return accessToken;
+  };
+
+  getProfile = (
+    cb: (statusCode: auth0.Auth0UserProfile | null, err: string | null) => void
+  ) => {
+    if (this.userProfile) return cb(this.userProfile, "");
+    this.auth0.client.userInfo(this.getAccessToken(), (err, profile) => {
+      if (profile) this.userProfile = profile;
+      cb(profile, "");
+    });
+  };
 }
