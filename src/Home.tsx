@@ -8,14 +8,14 @@ export interface IHomeProps {
 
 export default class Home extends React.Component<IHomeProps, any> {
   public render() {
-    //const {isAuthenticated,Login} = this.props.auth;
+    const { isAuthenticated, login } = this.props.auth;
     return (
       <div>
         <h1> Home</h1>
-        {this.props.auth.isAuthenticated() ? (
+        {isAuthenticated() ? (
           <Link to="/profile">Viwe Profile</Link>
         ) : (
-          <button onClick={this.props.auth.login}>Login</button>
+          <button onClick={login}>Login</button>
         )}
       </div>
     );

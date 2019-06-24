@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Route } from "react-router-dom";
+import { Route, Redirect } from "react-router-dom";
 import Home from "./Home";
 import Profile from "./Profile";
 import Nav from "./Nav";
@@ -8,6 +8,7 @@ import Callback from "./Callback";
 
 export interface IAppProps {
   history: any;
+  auth: Auth;
 }
 
 export default class App extends React.Component<IAppProps, any> {
@@ -20,7 +21,7 @@ export default class App extends React.Component<IAppProps, any> {
   render() {
     return (
       <>
-        <Nav />
+        <Nav auth={this.auth} />
         <div className="body">
           {/* Pass props to to the component */}
           <Route
@@ -33,7 +34,17 @@ export default class App extends React.Component<IAppProps, any> {
             exact
             render={props => <Callback auth={this.auth} {...props} />}
           />
-          <Route path="/profile" exact component={Profile} />
+          <Route
+            path="/profile"
+            exact
+            render={props =>
+              this.auth.isAuthenticated() ? (
+                <Profile auth={this.auth} {...props} />
+              ) : (
+                <Redirect to="/" />
+              )
+            }
+          />
         </div>
       </>
     );
