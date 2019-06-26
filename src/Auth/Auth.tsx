@@ -79,7 +79,7 @@ export default class Auth {
     // this.history.push("/");  Soft
     //Log out from Auth0 server
     this.auth0.logout({
-      clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
+      clientID: process.env.REACT_APP_AUTH0_CLIENTID,
       returnTo: "http://localhost:3000"
     });
   };
