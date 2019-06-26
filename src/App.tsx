@@ -5,6 +5,8 @@ import Profile from "./Profile";
 import Nav from "./Nav";
 import Auth from "./Auth/Auth";
 import Callback from "./Callback";
+import Public from "./public";
+import Private from "./Private";
 
 export interface IAppProps {
   history: any;
@@ -42,6 +44,19 @@ export default class App extends React.Component<IAppProps, any> {
                 <Profile auth={this.auth} {...props} />
               ) : (
                 <Redirect to="/" />
+              )
+            }
+          />
+          <Route path="/public" exact component={Public} />
+          <Route
+            path="/private"
+            exact
+            render={props =>
+              this.auth.isAuthenticated() ? (
+                <Private auth={this.auth} {...props} />
+              ) : (
+                <Redirect to="/" />
+                // this.auth.login()
               )
             }
           />

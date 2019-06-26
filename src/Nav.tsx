@@ -19,6 +19,15 @@ export default class App extends React.Component<IAppProps, any> {
             <Link to="/profile">Profile</Link>
           </li>
           <li>
+            <Link to="/public">Public</Link>
+          </li>
+          {isAuthenticated() && (
+            <li>
+              <Link to="/private">private</Link>
+            </li>
+          )}
+
+          <li>
             <button onClick={isAuthenticated() ? logout : login}>
               {isAuthenticated() ? "Log Out" : "Log In"}
             </button>

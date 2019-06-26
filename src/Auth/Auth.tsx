@@ -18,6 +18,9 @@ export default class Auth {
       redirectUri: process.env.REACT_APP_AUTH0_CALLBACK_URL
         ? process.env.REACT_APP_AUTH0_CALLBACK_URL
         : "",
+      audience: process.env.REACT_APP_AUTH0_AUDIENCE
+        ? process.env.REACT_APP_AUTH0_AUDIENCE
+        : "",
       responseType: "token id_token",
       scope: "openid profile email"
     });
@@ -29,6 +32,8 @@ export default class Auth {
 
   handleAuthentication = () => {
     this.auth0.parseHash((err, authResult) => {
+      console.log(authResult);
+
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
         this.history.push("/");
